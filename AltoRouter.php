@@ -95,7 +95,10 @@ class AltoRouter {
 
 		// set Request Url if it isn't passed as parameter
 		if($requestUrl === null) {
-			$requestUrl = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+			$requestUrl = isset($_SERVER['REQUEST_URI']) ? rtrim($_SERVER['REQUEST_URI'],'/') : '/';
+		}
+		else {
+			$requestUrl=rtrim($requestUrl,'/');
 		}
 
 		// Strip query string (?a=b) from Request Url
@@ -175,7 +178,8 @@ class AltoRouter {
 				return array(
 					'target' => $target,
 					'params' => $params,
-					'name' => $name
+					'name' => $name,
+					'requestparams'=> $_REQUEST
 				);
 			}
 		}
