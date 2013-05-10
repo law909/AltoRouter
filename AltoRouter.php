@@ -102,8 +102,8 @@ class AltoRouter {
 		}
 
 		// Strip query string (?a=b) from Request Url
-		if (false !== strpos($requestUrl, '?')) {
-			$requestUrl = strstr($requestUrl, '?', true);
+		if (($strpos = strpos($requestUrl, '?')) !== false) {
+			$requestUrl = substr($requestUrl, 0, $strpos);
 		}
 
 		// set Request Method if it isn't passed as a parameter
