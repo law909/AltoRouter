@@ -23,18 +23,18 @@ class AltoRouter {
 	*
 	*/
 	public function map($method, $route, $target, $name = null) {
-		
+
 		$route = $this->basePath . $route;
 
 		$this->routes[] = array($method, $route, $target, $name);
-		
+
 		if($name) {
-			if(isset($this->namedRoutes[$name])) { 
-				throw new \Exception("Can not redeclare route '{$name}'"); 
+			if(isset($this->namedRoutes[$name])) {
+				throw new \Exception("Can not redeclare route '{$name}'");
 			} else {
 				$this->namedRoutes[$name] = $route;
 			}
-			
+
 		}
 
 		return;
@@ -49,7 +49,7 @@ class AltoRouter {
 	* @param array @params Associative array of parameters to replace placeholders with.
 	* @return string The URL of the route with named parameters in place.
 	*/
-	public function generate($routeName, array $params = array()) {
+	public function generate($routeName, $fullPath = false, array $params = array()) {
 
 		// Check if named route exists
 		if(!isset($this->namedRoutes[$routeName])) {
@@ -61,7 +61,7 @@ class AltoRouter {
 		$url = $route;
 
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
-			
+
 			foreach($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
@@ -75,8 +75,13 @@ class AltoRouter {
 					$url = str_replace($block, '', $url);
 				}
 			}
-			
 
+
+		}
+
+		if ($fullPath) {
+			$parsedurl = parse_url($_SERVER['SCRIPT_URI']);
+			$url = $parsedurl['scheme'] . '://' . $parsedurl['host'] . $url;
 		}
 
 		return $url;
