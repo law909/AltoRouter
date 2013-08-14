@@ -49,7 +49,7 @@ class AltoRouter {
 	* @param array @params Associative array of parameters to replace placeholders with.
 	* @return string The URL of the route with named parameters in place.
 	*/
-	public function generate($routeName, $fullPath = false, array $params = array()) {
+	public function generate($routeName, $fullPath = false, array $params = array(), array $reqparams = array()) {
 
 		// Check if named route exists
 		if(!isset($this->namedRoutes[$routeName])) {
@@ -79,12 +79,21 @@ class AltoRouter {
 
 		}
 
+		$req = array();
+		foreach($reqparams as $k => $v) {
+			$req[] = $k . '=' . $v;
+		}
 		if ($fullPath) {
 			$parsedurl = parse_url($_SERVER['SCRIPT_URI']);
 			$url = $parsedurl['scheme'] . '://' . $parsedurl['host'] . $url;
 		}
+		$resurl = array();
+		$resurl[] = $url;
+		if ($req) {
+			$resurl[] = implode('&', $req);
+		}
 
-		return $url;
+		return implode('?',$resurl);
 	}
 
 	/**
