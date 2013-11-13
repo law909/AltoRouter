@@ -84,8 +84,13 @@ class AltoRouter {
 			$req[] = $k . '=' . $v;
 		}
 		if ($fullPath) {
-			$parsedurl = parse_url($_SERVER['SCRIPT_URI']);
-			$url = $parsedurl['scheme'] . '://' . $parsedurl['host'] . $url;
+            if (array_key_exists('SCRIPT_URI', $_SERVER)) {
+                $parsedurl = parse_url($_SERVER['SCRIPT_URI']);
+                $url = $parsedurl['scheme'] . '://' . $parsedurl['host'] . $url;
+            }
+            else {
+                $url = 'http://' . $_SERVER['HTTP_HOST'] . $url;
+            }
 		}
 		$resurl = array();
 		$resurl[] = $url;
