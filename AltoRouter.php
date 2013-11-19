@@ -84,7 +84,7 @@ class AltoRouter {
 			$req[] = $k . '=' . $v;
 		}
         if (is_string($fullPath)) {
-            $url = $fullpath . $url;
+            $url = $fullPath . $url;
         }
         else {
             if ($fullPath) {
